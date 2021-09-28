@@ -2,21 +2,29 @@ package com.example.harvey.composesample
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.harvey.composesample.ui.theme.ComposesampleTheme
@@ -28,15 +36,26 @@ class MainActivity : ComponentActivity() {
             ComposesampleTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    Greeting("onCreate")
+                    Conversation(messages = messages)
                 }
             }
         }
+
     }
 }
 
 @Composable
-fun Greeting(name: String) {
+fun Conversation(messages: List<Message>) {
+    LazyColumn {
+        items(messages) { message ->
+            Greeting(message)
+        }
+    }
+}
+
+
+@Composable
+fun Greeting(message: Message) {
     Row(modifier = Modifier.padding(top = 8.dp, start = 16.dp)) {
         Image(
             modifier = Modifier
@@ -44,23 +63,37 @@ fun Greeting(name: String) {
                 .background(colorResource(id = R.color.purple_200), shape = CircleShape)
                 .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
                 .clip(CircleShape),
-            painter = painterResource(id = R.drawable.ic_launcher_foreground),
+            painter = painterResource(id = message.profile),
             contentDescription = "img1"
         )
 
         Spacer(modifier = Modifier.width(16.dp))
 
-        Column {
+        var isExpanded by remember { mutableStateOf(false) }
+        val surfaceColor: Color by animateColorAsState(
+            targetValue = if (isExpanded) MaterialTheme.colors.primary else MaterialTheme.colors.secondaryVariant
+        )
+
+        Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
             Text(
-                text = "Hello1 $name!",
+                text = "Hello1 ${message.name}",
                 color = MaterialTheme.colors.secondaryVariant,
                 style = MaterialTheme.typography.subtitle2
             )
 
-            Surface(shape = MaterialTheme.shapes.medium, elevation = 1.dp) {
+            Surface(
+                shape = MaterialTheme.shapes.medium,
+                elevation = 1.dp,
+                color = surfaceColor,
+                modifier = Modifier
+                    .animateContentSize()
+                    .padding(1.dp)
+            ) {
                 Text(
-                    text = "Hello2 $name!",
-                    style = MaterialTheme.typography.body2
+                    text = "Hello2 ${message.text}",
+                    style = MaterialTheme.typography.body2,
+                    maxLines = if (isExpanded) Int.MAX_VALUE else 1,
+                    overflow = TextOverflow.Ellipsis
                 )
             }
 
@@ -83,6 +116,34 @@ fun Greeting(name: String) {
 @Composable
 fun DefaultPreview() {
     ComposesampleTheme {
-        Greeting("It's preview")
+        Conversation(messages = messages)
     }
 }
+
+val messages = listOf(
+    Message(R.drawable.ic_launcher_foreground, "harvey", "Hi"),
+    Message(R.drawable.ic_launcher_background, "yevrah", "Hi~"),
+    Message(
+        R.drawable.ic_launcher_foreground, "harvey", "How are u?\n" +
+                "How you? How are you? How are you? How are you? How u?\n" +
+                "How are you? How are you?"
+    ),
+    Message(R.drawable.ic_launcher_background, "yevrah", "I'm fine"),
+    Message(R.drawable.ic_launcher_foreground, "harvey", "Hi"),
+    Message(R.drawable.ic_launcher_background, "yevrah", "Hi~"),
+    Message(
+        R.drawable.ic_launcher_foreground,
+        "harvey",
+        "How are you? How are you? How are you? How are you? How are you? How are you?u?\n" +
+                "How How are you? How are you?\n"
+    ),
+    Message(R.drawable.ic_launcher_background, "yevrah", "I'm fine"),
+    Message(R.drawable.ic_launcher_foreground, "harvey", "Hi"),
+    Message(R.drawable.ic_launcher_background, "yevrah", "Hi~"),
+    Message(
+        R.drawable.ic_launcher_foreground,
+        "harvey",
+        "How are you? How are you? How are you? How are you? How are you? How are you?\nHow are you? How are you?\n "
+    ),
+    Message(R.drawable.ic_launcher_background, "yevrah", "I'm fine")
+)
