@@ -2,7 +2,6 @@ package com.example.harvey.composesample
 
 import android.content.res.Configuration
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.animateColorAsState
@@ -23,22 +22,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.harvey.composesample.ui.theme.ComposesampleTheme
+import com.google.accompanist.glide.rememberGlidePainter
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ComposesampleTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Conversation(messages = messages)
-                }
-            }
+            // A surface container using the 'background' color from the theme
+
+            // to use xml theme, just do not use compose theme
+            Conversation(messages = messages)
         }
 
     }
@@ -61,10 +58,14 @@ fun Greeting(message: Message) {
             modifier = Modifier
                 .size(60.dp)
                 .background(colorResource(id = R.color.purple_200), shape = CircleShape)
-                .border(1.5.dp, MaterialTheme.colors.secondary, CircleShape)
+                .border(1.5.dp, Color(R.color.black), CircleShape)
                 .clip(CircleShape),
-            painter = painterResource(id = message.profile),
-            contentDescription = "img1"
+            //use glide
+            painter = rememberGlidePainter(
+                "http://via.placeholder.com/300.png",
+                previewPlaceholder = R.drawable.ic_launcher_foreground
+            ),
+            contentDescription = ""
         )
 
         Spacer(modifier = Modifier.width(16.dp))
@@ -73,12 +74,11 @@ fun Greeting(message: Message) {
         val surfaceColor: Color by animateColorAsState(
             targetValue = if (isExpanded) MaterialTheme.colors.primary else MaterialTheme.colors.secondaryVariant
         )
-
         Column(modifier = Modifier.clickable { isExpanded = !isExpanded }) {
             Text(
                 text = "Hello1 ${message.name}",
-                color = MaterialTheme.colors.secondaryVariant,
-                style = MaterialTheme.typography.subtitle2
+                //use xml color
+                color = Color(R.color.black)
             )
 
             Surface(
