@@ -42,7 +42,7 @@ fun ComposesampleTheme(
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
+        typography = Type.body1(),
         shapes = Shapes,
         content = content
     )

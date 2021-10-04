@@ -35,9 +35,8 @@ class MainActivity : ComponentActivity() {
             // A surface container using the 'background' color from the theme
 
             // to use xml theme, just do not use compose theme
-            Conversation(messages = messages)
+            Conversation(messages = getMessages())
         }
-
     }
 }
 
@@ -58,7 +57,7 @@ fun Greeting(message: Message) {
             modifier = Modifier
                 .size(60.dp)
                 .background(colorResource(id = R.color.purple_200), shape = CircleShape)
-                .border(1.5.dp, Color(R.color.black), CircleShape)
+                .border(1.5.dp, colorResource(R.color.black), CircleShape)
                 .clip(CircleShape),
             //use glide
             painter = rememberGlidePainter(
@@ -78,7 +77,7 @@ fun Greeting(message: Message) {
             Text(
                 text = "Hello1 ${message.name}",
                 //use xml color
-                color = Color(R.color.black)
+                color = colorResource(R.color.black)
             )
 
             Surface(
@@ -116,34 +115,6 @@ fun Greeting(message: Message) {
 @Composable
 fun DefaultPreview() {
     ComposesampleTheme {
-        Conversation(messages = messages)
+        Conversation(messages = getMessages())
     }
 }
-
-val messages = listOf(
-    Message(R.drawable.ic_launcher_foreground, "harvey", "Hi"),
-    Message(R.drawable.ic_launcher_background, "yevrah", "Hi~"),
-    Message(
-        R.drawable.ic_launcher_foreground, "harvey", "How are u?\n" +
-                "How you? How are you? How are you? How are you? How u?\n" +
-                "How are you? How are you?"
-    ),
-    Message(R.drawable.ic_launcher_background, "yevrah", "I'm fine"),
-    Message(R.drawable.ic_launcher_foreground, "harvey", "Hi"),
-    Message(R.drawable.ic_launcher_background, "yevrah", "Hi~"),
-    Message(
-        R.drawable.ic_launcher_foreground,
-        "harvey",
-        "How are you? How are you? How are you? How are you? How are you? How are you?u?\n" +
-                "How How are you? How are you?\n"
-    ),
-    Message(R.drawable.ic_launcher_background, "yevrah", "I'm fine"),
-    Message(R.drawable.ic_launcher_foreground, "harvey", "Hi"),
-    Message(R.drawable.ic_launcher_background, "yevrah", "Hi~"),
-    Message(
-        R.drawable.ic_launcher_foreground,
-        "harvey",
-        "How are you? How are you? How are you? How are you? How are you? How are you?\nHow are you? How are you?\n "
-    ),
-    Message(R.drawable.ic_launcher_background, "yevrah", "I'm fine")
-)
