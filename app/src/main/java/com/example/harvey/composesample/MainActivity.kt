@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
 
             // to use xml theme, just do not use compose theme
 
-            Column {
+            Row {
                 CustomLayoutTest()
                 Conversation(messages = getMessages())
             }
