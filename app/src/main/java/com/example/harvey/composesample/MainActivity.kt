@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.harvey.composesample.ui.theme.ComposesampleTheme
 import com.google.accompanist.glide.rememberGlidePainter
 
+// test commit
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
